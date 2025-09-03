@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Food shop Eight BACKEND</title>
+        <link rel="stylesheet" href="">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+            body {
+                font-family: "Poppins", serif;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+            }
+            h1{
+                font-size: 50px;
+            }
+            button {
+                color: white;
+                border: none;
+                padding: 15px 30px;
+                text-align: center;
+                font-size: 18px;
+                cursor: pointer;
+                border-radius: 5px;
+                text-decoration: none;
+            }
+            .button-1{
+                background-color: #4CAF50;
+            }
+            .button-2{
+                background-color: #417690;
+            }   
+            button a {
+                text-decoration: none;
+                color: white;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+        </style>
+    </head>
+    
+    
+    <body>
+        
+        <h1>
+            Food shop Eight BACKEND
+        </h1>
+        <div class="container">
+            <div class="row">
+                <button class="button-1">
+                    <a href="{% url 'api_gateway:swagger-ui' %}">Go to API Docs</a>
+                </button>
+                <button class="button-2">
+                    <a href="/admin/">Go to Admin</a>
+                </button>
+            </div>
+        </div>
+    </body>
+</html>

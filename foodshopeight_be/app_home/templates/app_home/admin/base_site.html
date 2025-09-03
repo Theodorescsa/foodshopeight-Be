@@ -1,0 +1,27 @@
+{% extends "admin/base.html" %}
+
+{% block title %} Food shop Eight Admin{% endblock %}
+
+{% block branding %}
+    <!-- Đổi tiêu đề trang Admin -->
+    <h1 id="site-name">
+        <a href="{% url 'admin:index' %}" class="appicon">
+             Food shop Eight Admin
+        </a>
+    </h1>
+{% endblock %}
+
+{% block nav-global %}
+{% endblock %}
+
+{% block content %}
+    <div id="content-main">
+        <!-- Nội dung trang Admin chính -->
+        <div class="module">
+            <h2>Welcome to Food Shop Eight Dashboard</h2>
+            <p>Quản lý hệ thống dễ dàng hơn với Food shop Eight Admin.</p>
+        </div>
+        {% block after_content %}
+        {% endblock %}
+    </div>
+{% endblock %}
