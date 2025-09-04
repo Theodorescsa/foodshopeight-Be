@@ -47,6 +47,11 @@ INSTALLED_APPS = [
     'sekizai',
     
     'api_gateway',
+    'app_home',
+    'app_hr',
+    'app_menu',
+    'app_order',
+    'app_inventory',
     
 ]
 
