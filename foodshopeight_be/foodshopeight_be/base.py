@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',                  # <— thêm dòng này, đặt lên đầu khối admin
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -196,3 +197,47 @@ TEMPLATES = [
         },
     },
 ]
+JAZZMIN_SETTINGS = {
+    "site_title": "Food Shop Admin",
+    "site_header": "Food Shop Admin",
+    "site_brand": "Food Shop",
+    "welcome_sign": "Xin chào 👋",
+    "copyright": "MCI Solutions",
+    "show_ui_builder": False,  # ẩn nút chỉnh giao diện trong UI
+    "topmenu_links": [
+        {"name": "API Docs", "url": "/api/docs/", "new_window": True},
+    ],
+    "icons": {
+        "app_home.AppSetting": "fas fa-sliders-h",
+        "app_home.Unit": "fas fa-balance-scale",
+        "app_home.MenuCategory": "fas fa-th-list",
+        "app_home.IngredientCategory": "fas fa-seedling",
+        "app_home.Department": "fas fa-sitemap",
+        "app_home.Position": "fas fa-id-badge",
+        "app_home.DiningTable": "fas fa-chair",
+
+        "app_hr.StaffProfile": "fas fa-user-tie",
+
+        "app_menu.MenuItem": "fas fa-hamburger",
+        "app_menu.RecipeItem": "fas fa-utensils",
+
+        "app_order.Order": "fas fa-receipt",
+        "app_order.OrderItem": "fas fa-list-ol",
+        "app_order.Payment": "fas fa-money-check-alt",
+
+        "app_inventory.Supplier": "fas fa-truck",
+        "app_inventory.Ingredient": "fas fa-carrot",
+        "app_inventory.InventoryLot": "fas fa-boxes",
+    },
+    "order_with_respect_to": [
+        "app_home", "app_inventory", "app_menu", "app_order", "app_hr"
+    ],
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "darkly",              # hoặc "flatly" (sáng), "cyborg" (tối)…
+    "navbar": "navbar-dark",
+    "sidebar": "sidebar-dark-primary",
+    "footer_fixed": True,
+    "body_small_text": False,
+}
