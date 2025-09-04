@@ -53,7 +53,12 @@ class InventoryLot(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, related_name="lots")
     supplier = models.ForeignKey(Supplier, on_delete=models.SET_NULL, null=True, blank=True, related_name="lots")
     quantity_received = models.DecimalField(max_digits=12, decimal_places=3, validators=[MinValueValidator(0)])
-    quantity_remaining = models.DecimalField(max_digits=12, decimal_places=3, validators=[MinValueValidator(0)])
+    quantity_remaining = models.DecimalField(
+        max_digits=12,
+        decimal_places=3,
+        validators=[MinValueValidator(0)],
+        null=True, blank=True   # 👈 thêm vào
+    )
     unit_price = models.DecimalField(max_digits=14, decimal_places=2)  # giá/đơn vị
     received_date = models.DateField(default=timezone.now)
     expiry_date = models.DateField(null=True, blank=True)
@@ -66,3 +71,8 @@ class InventoryLot(models.Model):
 
     def __str__(self):
         return f"{self.ingredient.name} - {self.received_date} ({self.quantity_remaining}/{self.quantity_received})"
+    def save(self, *args, **kwargs):
+        # Nếu là bản ghi mới và chưa nhập remaining, gán bằng received
+        if self._state.adding and not self.quantity_remaining:
+            self.quantity_remaining = self.quantity_received
+        super().save(*args, **kwargs)

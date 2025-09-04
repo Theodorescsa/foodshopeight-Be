@@ -47,15 +47,9 @@ class IngredientAdmin(admin.ModelAdmin):
 
 @admin.register(InventoryLot)
 class InventoryLotAdmin(admin.ModelAdmin):
-    list_display = (
-        "ingredient",
-        "supplier",
-        "quantity_received",
-        "quantity_remaining",
-        "unit_price",
-        "received_date",
-        "expiry_date",
-    )
-    list_filter = ("ingredient", "supplier", "expiry_date", "received_date")
-    search_fields = ("ingredient__name", "supplier__name")
-    ordering = ("-received_date",)
+    list_display = ("ingredient", "supplier", "quantity_received", "quantity_remaining", "unit_price", "received_date", "expiry_date")
+
+    def save_model(self, request, obj, form, change):
+        if not change and not obj.quantity_remaining:
+            obj.quantity_remaining = obj.quantity_received
+        super().save_model(request, obj, form, change)
