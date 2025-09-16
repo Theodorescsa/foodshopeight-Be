@@ -1,4 +1,5 @@
 # app_home/views.py
+from django.http import JsonResponse
 from rest_framework import viewsets, permissions
 from drf_spectacular.utils import (
     extend_schema, OpenApiParameter, OpenApiTypes, extend_schema_view
@@ -18,19 +19,15 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.response import Response
 from rest_framework import status
 
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiExample, OpenApiParameter, OpenApiTypes
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiTypes
 from rest_framework import viewsets
-from rest_framework.decorators import action, api_view
 from django.contrib.auth.models import User
-from django.db import transaction
-from django.utils import timezone
 from django.db.models import Q
-from rest_framework.views import APIView
 
 from .serializers import CustomTokenObtainPairSerializer
 from .pagination import CustomPagination
 from .docs import *
-from datetime import date
+
 # Create your views here.
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
