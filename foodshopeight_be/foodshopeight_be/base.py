@@ -243,32 +243,25 @@ JAZZMIN_UI_TWEAKS = {
     "footer_fixed": True,
     "body_small_text": False,
 }
-
-# Celery
-CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
-CELERY_RESULT_BACKEND = "django-db"
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="redis://redis:6379/0")
+CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", default="django-db")
 CELERY_TIMEZONE = "Asia/Bangkok"
-CELERY_TASK_TIME_LIMIT = 60 * 10          # hard limit 10'
-CELERY_TASK_SOFT_TIME_LIMIT = 60 * 9      # soft limit 9'
-CELERY_TASK_ACKS_LATE = True              # xử lý lại nếu worker chết
+CELERY_TASK_TIME_LIMIT = 60 * 10
+CELERY_TASK_SOFT_TIME_LIMIT = 60 * 9
+CELERY_TASK_ACKS_LATE = True
 CELERY_TASK_REJECT_ON_WORKER_LOST = True
 
-# Tùy chọn: routing theo queue
+# Gộp routes thành 1 dict duy nhất
 CELERY_TASK_ROUTES = {
     "app.tasks.post_to_facebook": {"queue": "posting"},
     "app.tasks.send_email": {"queue": "default"},
-}
-
-
-# Route task API sang queue riêng 'background'
-CELERY_TASK_ROUTES = {
     "app_home.tasks.background_job": {"queue": "background"},
 }
 
-# Lịch health_check mỗi 2 giây
+# Beat schedule giữ nguyên
 CELERY_BEAT_SCHEDULE = {
     "health-check-every-2s": {
         "task": "app_home.tasks.health_check",
-        "schedule": 2.0,  # 2 giây
+        "schedule": 2.0,
     }
 }
