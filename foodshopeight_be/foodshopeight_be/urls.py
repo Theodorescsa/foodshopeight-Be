@@ -32,6 +32,9 @@ urlpatterns = [
     
     path('api-gateway/', include(('api_gateway.urls', 'api-gateway'), namespace='api-gateway')),
     path('api/app-home/', include("app_home.urls", namespace='app_home')),
+    path("api/app-hr/", include("app_hr.urls", namespace="app_hr")),
+    path("api/app-inventory/", include("app_inventory.urls", namespace="app_inventory")),
+    path("api/app-menu/", include("app_menu.urls", namespace="app_menu")),
     
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     
