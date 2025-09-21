@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import TokenRefreshView,TokenObtainPairView
 router = DefaultRouter()
 app_name = 'app_home'
 
-router.register(r'units', views.UnitViewSet, basename='unit')
+router.register(r'units-admin', views.UnitViewSet, basename='unit')
 router.register(r'ingredient-categories', views.IngredientCategoryViewSet, basename='ingredient-category')
 router.register(r'menu-categories', views.MenuCategoryViewSet, basename='menu-category')
 router.register(r'departments', views.DepartmentViewSet, basename='department')
