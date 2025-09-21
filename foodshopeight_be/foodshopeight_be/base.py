@@ -263,7 +263,7 @@ LOCALE_PATHS = [
 
 # CORS
 CORS_ALLOW_ALL_ORIGINS = True  # ✅ Cho phép mọi domain
-CORS_ALLOWED_ORIGINS = []      # ❌ Không cần dùng nếu mở full
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000","https://theodorescsa.id.vn","https://localhost:5000"]      # ❌ Không cần dùng nếu mở full
 CORS_ALLOW_METHODS = [         # ✅ Cho phép tất cả các HTTP method cơ bản
     "DELETE",
     "GET",
