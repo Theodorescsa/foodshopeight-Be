@@ -14,8 +14,8 @@ class Unit(models.Model):
     name = models.CharField("Tên đơn vị", max_length=100)             # 'Kilogram', 'Chai'
 
     class Meta:
-        verbose_name = "Đơn vị đo"
-        verbose_name_plural = "Đơn vị đo"
+        verbose_name = "Đơn vị đo hehe"
+        verbose_name_plural = "Đơn vị đo hehe"
 
     def __str__(self):
         return self.code
