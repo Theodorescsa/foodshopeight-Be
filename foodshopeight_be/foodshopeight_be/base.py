@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_spectacular',
     'sekizai',
-    
+    "corsheaders",
+
     'api_gateway',
     'app_home',
     'app_hr',
@@ -56,6 +57,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",  # put it at the very top
+    "middleware.disable_csrf.DisableCSRFMiddleware",  # 👈 Thêm dòng này
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     "django.middleware.locale.LocaleMiddleware",   # đặt ngay sau SessionMiddleware
@@ -257,4 +261,26 @@ LANGUAGES = [
 # (không bắt buộc) nơi để bạn đặt file dịch tùy biến của riêng project
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
+]
+
+# CORS
+CORS_ALLOW_ALL_ORIGINS = True  # ✅ Cho phép mọi domain
+CORS_ALLOW_METHODS = [         # ✅ Cho phép tất cả các HTTP method cơ bản
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+CORS_ALLOW_HEADERS = [         # ✅ Cho phép các header phổ biến
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
 ]

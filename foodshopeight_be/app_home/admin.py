@@ -10,7 +10,7 @@ from .models import (
 
 @admin.register(Unit)
 class UnitAdmin(admin.ModelAdmin):
-    list_display = ("code", "name")
+    list_display = ("code",)
     search_fields = ("code", "name")
     ordering = ("code",)
 
