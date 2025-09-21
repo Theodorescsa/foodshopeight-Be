@@ -1,0 +1,56 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Dashboard | {{ site_title }}{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+  {# Dùng CDN cho nhanh, hoặc tự copy chart.umd.js vào static #}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <style>
+    .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .card { background: var(--body-bg); border-radius: 12px; padding: 16px; box-shadow: 0 6px 16px rgba(0,0,0,.06); }
+    @media (max-width: 1024px){ .dash-grid{ grid-template-columns: 1fr; } }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="dash-grid">
+    <div class="card">
+      <h3>Người dùng mới theo tháng</h3>
+      <canvas id="lineUsers"></canvas>
+    </div>
+    <div class="card">
+      <h3>Tỉ lệ User Active/Inactive</h3>
+      <canvas id="pieActive"></canvas>
+    </div>
+  </div>
+
+  <script>
+    async function loadData(){
+      const res = await fetch("{% url 'admin:dashboard-data' %}", {credentials: "same-origin"});
+      const data = await res.json();
+
+      // Line chart
+      new Chart(document.getElementById('lineUsers'), {
+        type: 'line',
+        data: {
+          labels: data.labels,
+          datasets: [{ label: 'Users', data: data.series_users, tension: .3, fill: false }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+
+      // Pie chart
+      new Chart(document.getElementById('pieActive'), {
+        type: 'pie',
+        data: {
+          labels: ['Active', 'Inactive'],
+          datasets: [{ data: [data.pie.active, data.pie.inactive] }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+    }
+    loadData();
+  </script>
+{% endblock %}

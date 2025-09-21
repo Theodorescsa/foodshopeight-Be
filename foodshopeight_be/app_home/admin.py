@@ -67,4 +67,3 @@ class AppSettingAdmin(admin.ModelAdmin):
 
 # Gỡ model gốc khỏi admin
 admin.site.unregister(Group)
-
