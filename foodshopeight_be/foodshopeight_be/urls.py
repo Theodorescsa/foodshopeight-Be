@@ -37,5 +37,6 @@ urlpatterns = [
     path("api/app-menu/", include("app_menu.urls", namespace="app_menu")),
     
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
-    
+    path("i18n/", include("django.conf.urls.i18n")),  # để form đổi ngôn ngữ hoạt động
+
 ]
