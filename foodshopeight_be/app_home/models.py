@@ -10,7 +10,7 @@ class UserProxy(User):
 
 class Unit(models.Model):
     """Đơn vị đo: kg, chai, ly, ..."""
-    code = models.CharField("Mã đơn vị", max_length=50, unique=True)  # 'kg', 'chai'
+    code = models.CharField("Mã đơn vị hehee", max_length=50, unique=True)  # 'kg', 'chai'
     name = models.CharField("Tên đơn vị", max_length=100)             # 'Kilogram', 'Chai'
 
     class Meta:
