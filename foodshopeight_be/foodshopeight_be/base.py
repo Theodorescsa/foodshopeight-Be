@@ -260,3 +260,26 @@ LANGUAGES = [
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
 ]
+
+# CORS
+CORS_ALLOW_ALL_ORIGINS = True  # ✅ Cho phép mọi domain
+CORS_ALLOWED_ORIGINS = []      # ❌ Không cần dùng nếu mở full
+CORS_ALLOW_METHODS = [         # ✅ Cho phép tất cả các HTTP method cơ bản
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+CORS_ALLOW_HEADERS = [         # ✅ Cho phép các header phổ biến
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
