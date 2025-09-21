@@ -1,0 +1,99 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Dashboard | {{ site_title }}{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <style>
+    .grid { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+    .card { background: var(--body-bg); border-radius: 12px; padding: 16px; box-shadow: 0 6px 16px rgba(0,0,0,.06); }
+    .kpis { display:grid; grid-template-columns: repeat(4,1fr); gap:12px; margin-bottom:16px; }
+    .kpi { background: var(--body-bg); border-radius: 12px; padding: 14px; }
+    .kpi h4 { margin:0 0 6px; font-size:14px; opacity:.7; }
+    .kpi .val { font-size:22px; font-weight:700; }
+    @media (max-width: 1024px){
+      .grid { grid-template-columns: 1fr; }
+      .kpis { grid-template-columns: 1fr 1fr; }
+    }
+    .chart-wrap { height:320px; }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="kpis">
+    <div class="kpi"><h4>Doanh thu hôm nay</h4><div class="val" id="kpi-rev-today">—</div></div>
+    <div class="kpi"><h4>Doanh thu 7 ngày</h4><div class="val" id="kpi-rev-7d">—</div></div>
+    <div class="kpi"><h4>Đơn hôm nay</h4><div class="val" id="kpi-orders-today">—</div></div>
+    <div class="kpi"><h4>AOV 30 ngày</h4><div class="val" id="kpi-aov-30d">—</div></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Doanh thu theo ngày (14 ngày)</h3>
+      <div class="chart-wrap"><canvas id="chartRevenue"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Tỉ lệ phương thức thanh toán (30 ngày)</h3>
+      <div class="chart-wrap"><canvas id="chartPayMethod"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Top 10 món bán chạy (30 ngày)</h3>
+      <div class="chart-wrap"><canvas id="chartTopItems"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Trạng thái đơn hôm nay</h3>
+      <div class="chart-wrap"><canvas id="chartStatus"></canvas></div>
+    </div>
+  </div>
+
+<script>
+  async function loadDash(){
+    const url = "{% url 'admin:dashboard-data' %}";
+    try {
+      const res = await fetch(url, {credentials: "same-origin"});
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const d = await res.json();
+
+      const fmt = new Intl.NumberFormat('vi-VN');
+      const money = v => fmt.format(Math.round(v)) + ' ₫';
+
+      document.getElementById('kpi-rev-today').textContent = money(d.kpi.revenue_today);
+      document.getElementById('kpi-rev-7d').textContent = money(d.kpi.revenue_7d);
+      document.getElementById('kpi-orders-today').textContent = fmt.format(d.kpi.orders_today);
+      document.getElementById('kpi-aov-30d').textContent = money(d.kpi.aov_30d);
+
+      new Chart(document.getElementById('chartRevenue'), {
+        type: 'line',
+        data: { labels: d.revenue_by_day.labels, datasets: [{ label: 'Doanh thu', data: d.revenue_by_day.values, tension:.3 }] },
+        options: { responsive:true, maintainAspectRatio:false }
+      });
+
+      new Chart(document.getElementById('chartPayMethod'), {
+        type: 'doughnut',
+        data: { labels: d.pay_methods.labels, datasets: [{ data: d.pay_methods.values }] },
+        options: { responsive:true, maintainAspectRatio:false }
+      });
+
+      new Chart(document.getElementById('chartTopItems'), {
+        type: 'bar',
+        data: { labels: d.top_items.labels, datasets: [{ label: 'Số lượng', data: d.top_items.values }] },
+        options: { responsive:true, maintainAspectRatio:false }
+      });
+
+      new Chart(document.getElementById('chartStatus'), {
+        type: 'bar',
+        data: { labels: d.order_status_today.labels, datasets: [{ label: 'Đơn', data: d.order_status_today.values }] },
+        options: { responsive:true, maintainAspectRatio:false }
+      });
+
+    } catch (e) {
+      console.error("Dashboard fetch error:", e);
+      // Optional: show toast/alert
+    }
+  }
+  loadDash();
+</script>
+
+{% endblock %}

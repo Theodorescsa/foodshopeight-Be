@@ -1,6 +1,7 @@
 # app_inventory/admin.py
 from django.contrib import admin
 from .models import Supplier, Ingredient, InventoryLot
+from django import forms
 
 
 @admin.register(Supplier)
@@ -45,11 +46,18 @@ class IngredientAdmin(admin.ModelAdmin):
     current_stock_display.short_description = "Tồn kho hiện tại"
 
 
+class InventoryLotForm(forms.ModelForm):
+    class Meta:
+        model = InventoryLot
+        fields = "__all__"
+        widgets = {
+            "quantity_received": forms.NumberInput(attrs={"step": "1"}),   # 👉 tăng theo 0.1
+            "quantity_remaining": forms.NumberInput(attrs={"step": "1"}),
+            "unit_price": forms.NumberInput(attrs={"step": "1000"}),         # ví dụ: nhảy 1000/đơn
+        }
+
 @admin.register(InventoryLot)
 class InventoryLotAdmin(admin.ModelAdmin):
-    list_display = ("ingredient", "supplier", "quantity_received", "quantity_remaining", "unit_price", "received_date", "expiry_date")
-
-    def save_model(self, request, obj, form, change):
-        if not change and not obj.quantity_remaining:
-            obj.quantity_remaining = obj.quantity_received
-        super().save_model(request, obj, form, change)
+    form = InventoryLotForm
+    list_display = ("ingredient","supplier","quantity_received","quantity_remaining",
+                    "unit_price","received_date","expiry_date")
