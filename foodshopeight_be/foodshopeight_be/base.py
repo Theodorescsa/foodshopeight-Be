@@ -58,6 +58,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "django.middleware.locale.LocaleMiddleware",   # đặt ngay sau SessionMiddleware
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -201,7 +203,7 @@ JAZZMIN_SETTINGS = {
     "site_header": "Food Shop Admin",
     "site_brand": "Food Shop",
     "welcome_sign": "Xin chào 👋",
-    "copyright": "MCI Solutions",
+    "copyright": "Food shop Eight",
     "show_ui_builder": False,  # ẩn nút chỉnh giao diện trong UI
     "topmenu_links": [
         {"name": "API Docs", "url": "/api/docs/", "new_window": True},
@@ -231,6 +233,8 @@ JAZZMIN_SETTINGS = {
     "order_with_respect_to": [
         "app_home", "app_inventory", "app_menu", "app_order", "app_hr"
     ],
+    "language_chooser": True,   # hiện nút chọn ngôn ngữ ở góc phải
+
 }
 
 JAZZMIN_UI_TWEAKS = {
@@ -240,3 +244,17 @@ JAZZMIN_UI_TWEAKS = {
     "footer_fixed": True,
     "body_small_text": False,
 }
+
+LANGUAGE_CODE = "vi"          # đặt mặc định là Tiếng Việt
+USE_I18N = True
+
+LANGUAGES = [
+    ("vi", "Tiếng Việt"),
+    ("en", "English"),
+    # ... (nếu cần thêm)
+]
+
+# (không bắt buộc) nơi để bạn đặt file dịch tùy biến của riêng project
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, "locale"),
+]
