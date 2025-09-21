@@ -3,7 +3,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from .celery_views import DoWorkView
 from . import views
 from rest_framework_simplejwt.views import TokenRefreshView,TokenObtainPairView
 
@@ -22,6 +21,5 @@ urlpatterns = [
     path("v1/", include(router.urls)),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path("api/do-work/", DoWorkView.as_view(), name="do-work"),
 
     ]
