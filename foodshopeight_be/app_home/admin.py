@@ -1,8 +1,10 @@
 # app_home/admin.py
 from django.contrib import admin
+from django.contrib.auth.models import User, Group
+from django.contrib.auth.admin import UserAdmin
 from .models import (
     Unit, IngredientCategory, MenuCategory,
-    Department, Position, DiningTable, AppSetting
+    Department, Position, DiningTable, AppSetting, UserProxy
 )
 
 
@@ -61,3 +63,8 @@ class AppSettingAdmin(admin.ModelAdmin):
         if AppSetting.objects.exists():
             return False
         return super().has_add_permission(request)
+
+
+# Gỡ model gốc khỏi admin
+admin.site.unregister(Group)
+

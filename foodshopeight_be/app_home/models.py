@@ -1,5 +1,12 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.contrib.auth.models import User
+
+class UserProxy(User):
+    class Meta:
+        proxy = True
+        verbose_name = "Danh sách nhân viên"
+        verbose_name_plural = "Danh sách nhân viên"
 
 class Unit(models.Model):
     """Đơn vị đo: kg, chai, ly, ..."""
