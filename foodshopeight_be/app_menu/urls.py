@@ -5,8 +5,8 @@ from .views import MenuItemViewSet, RecipeItemViewSet
 router = DefaultRouter()
 app_name = "app_menu"
 
-router.register(r"items", MenuItemViewSet, basename="menu-items")
-router.register(r"recipes", RecipeItemViewSet, basename="menu-recipes")
+router.register(r"menu-items", MenuItemViewSet, basename="menu-items")
+router.register(r"menu-recipes", RecipeItemViewSet, basename="menu-recipes")
 
 urlpatterns = [
     path("", include(router.urls)),
