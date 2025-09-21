@@ -24,27 +24,26 @@ class Order(models.Model):
         PAID = "paid", "Đã thanh toán"
         REFUNDED = "refunded", "Hoàn tiền"
 
-    order_number = models.CharField(max_length=50, unique=True)  # "ORD-001"
-    customer_name = models.CharField(max_length=255, blank=True, default="")
-    customer_phone = models.CharField(max_length=50, blank=True, default="")
-    order_type = models.CharField(max_length=20, choices=OrderType.choices, default=OrderType.DINE_IN)
+    order_number = models.CharField("Mã đơn hàng", max_length=50, unique=True)  # "ORD-001"
+    customer_name = models.CharField("Tên khách", max_length=255, blank=True, default="")
+    customer_phone = models.CharField("SĐT khách", max_length=50, blank=True, default="")
+    order_type = models.CharField("Hình thức", max_length=20, choices=OrderType.choices, default=OrderType.DINE_IN)
 
-    table = models.ForeignKey(DiningTable, on_delete=models.SET_NULL, null=True, blank=True, related_name="orders")
+    table = models.ForeignKey(DiningTable, on_delete=models.SET_NULL, null=True, blank=True, related_name="orders", verbose_name="Bàn")
 
-    subtotal = models.DecimalField(max_digits=14, decimal_places=2, default=0, validators=[MinValueValidator(0)])
-    tax = models.DecimalField(max_digits=14, decimal_places=2, default=0, validators=[MinValueValidator(0)])
-    discount = models.DecimalField(max_digits=14, decimal_places=2, default=0, validators=[MinValueValidator(0)])
-    total = models.DecimalField(max_digits=14, decimal_places=2, default=0, validators=[MinValueValidator(0)])
+    subtotal = models.DecimalField("Tạm tính", max_digits=14, decimal_places=2, default=0, validators=[MinValueValidator(0)])
+    tax = models.DecimalField("Thuế", max_digits=14, decimal_places=2, default=0, validators=[MinValueValidator(0)])
+    discount = models.DecimalField("Giảm giá", max_digits=14, decimal_places=2, default=0, validators=[MinValueValidator(0)])
+    total = models.DecimalField("Thành tiền", max_digits=14, decimal_places=2, default=0, validators=[MinValueValidator(0)])
 
-    order_status = models.CharField(max_length=20, choices=OrderStatus.choices, default=OrderStatus.PENDING)
-    payment_status = models.CharField(max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.UNPAID)
+    order_status = models.CharField("Trạng thái đơn", max_length=20, choices=OrderStatus.choices, default=OrderStatus.PENDING)
+    payment_status = models.CharField("Trạng thái thanh toán", max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.UNPAID)
 
-    created_at = models.DateTimeField(default=timezone.now)
-    completed_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField("Ngày tạo", default=timezone.now)
+    completed_at = models.DateTimeField("Ngày hoàn tất", null=True, blank=True)
 
-    # nhân viên tạo/đảm nhiệm (optional: ForeignKey tới User/Staff)
-    staff_name = models.CharField(max_length=255, blank=True, default="")  # giữ theo mock; có thể đổi sang FK sau
-    notes = models.TextField(blank=True, default="")
+    staff_name = models.CharField("Nhân viên phụ trách", max_length=255, blank=True, default="")
+    notes = models.TextField("Ghi chú", blank=True, default="")
 
     class Meta:
         indexes = [
@@ -53,6 +52,8 @@ class Order(models.Model):
             models.Index(fields=["order_status"]),
             models.Index(fields=["payment_status"]),
         ]
+        verbose_name = "Đơn hàng"
+        verbose_name_plural = "Đơn hàng"
 
     def __str__(self):
         return self.order_number
@@ -66,13 +67,16 @@ class Order(models.Model):
         return self
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
-    menu_item = models.ForeignKey(MenuItem, on_delete=models.SET_NULL, null=True, blank=True, related_name="order_items")
-    # snapshot để không phụ thuộc giá thay đổi sau này
-    name = models.CharField(max_length=255)  
-    unit_price = models.DecimalField(max_digits=14, decimal_places=2, validators=[MinValueValidator(0)])
-    quantity = models.PositiveIntegerField(default=1)
-    total = models.DecimalField(max_digits=14, decimal_places=2, default=0, validators=[MinValueValidator(0)])
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items", verbose_name="Đơn hàng")
+    menu_item = models.ForeignKey(MenuItem, on_delete=models.SET_NULL, null=True, blank=True, related_name="order_items", verbose_name="Món")
+    name = models.CharField("Tên món (snapshot)", max_length=255)
+    unit_price = models.DecimalField("Đơn giá (snapshot)", max_digits=14, decimal_places=2, validators=[MinValueValidator(0)])
+    quantity = models.PositiveIntegerField("Số lượng", default=1)
+    total = models.DecimalField("Thành tiền (dòng)", max_digits=14, decimal_places=2, default=0, validators=[MinValueValidator(0)])
+
+    class Meta:
+        verbose_name = "Mặt hàng trong đơn"
+        verbose_name_plural = "Mặt hàng trong đơn"
 
     def save(self, *args, **kwargs):
         self.total = (self.unit_price or 0) * (self.quantity or 0)
@@ -85,11 +89,16 @@ class Payment(models.Model):
         TRANSFER = "transfer", "Chuyển khoản"
         E_WALLET = "ewallet", "Ví điện tử"
 
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="payments")
-    method = models.CharField(max_length=20, choices=Method.choices)
-    amount = models.DecimalField(max_digits=14, decimal_places=2, validators=[MinValueValidator(0)])
-    paid_at = models.DateTimeField(default=timezone.now)
-    note = models.CharField(max_length=255, blank=True, default="")
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="payments", verbose_name="Đơn hàng")
+    method = models.CharField("Phương thức", max_length=20, choices=Method.choices)
+    amount = models.DecimalField("Số tiền", max_digits=14, decimal_places=2, validators=[MinValueValidator(0)])
+    paid_at = models.DateTimeField("Thời điểm thanh toán", default=timezone.now)
+    note = models.CharField("Ghi chú", max_length=255, blank=True, default="")
 
     class Meta:
-        indexes = [models.Index(fields=["paid_at"]),]
+        indexes = [models.Index(fields=["paid_at"])]
+        verbose_name = "Thanh toán"
+        verbose_name_plural = "Thanh toán"
+
+    def __str__(self):
+        return f"{self.get_method_display()} - {self.amount}"
