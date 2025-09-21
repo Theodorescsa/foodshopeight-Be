@@ -58,6 +58,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",  # put it at the very top
+    "middleware.disable_csrf.DisableCSRFMiddleware",  # 👈 Thêm dòng này
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     "django.middleware.locale.LocaleMiddleware",   # đặt ngay sau SessionMiddleware
