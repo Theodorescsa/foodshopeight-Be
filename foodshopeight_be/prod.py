@@ -8,8 +8,8 @@ SECURE_SSL_REDIRECT = False
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Tối thiểu IP server (hoặc domain) – đừng để '*'
-ALLOWED_HOSTS = ['103.216.116.118']
-CSRF_TRUSTED_ORIGINS = ['http://103.216.116.118']
+ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = ['*']
 
 # DB giữ nguyên phần bạn dùng env PROD
 DATABASES = {
