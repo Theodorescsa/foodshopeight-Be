@@ -1,10 +1,17 @@
 from .base import *
-DEBUG = True
-SECURE_SSL_REDIRECT = True
-# Nếu muốn chuyển địa chỉ trang web hoặc muốn tạo 1 đường dẫn mới thì copy và tạo như folder này, sau đó gán vào - tieplv
-ALLOWED_HOSTS = ['*']
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+# Prod mà :>
+DEBUG = False
+
+# Khi CHƯA có HTTPS qua Nginx/certbot thì KHÔNG redirect https
+SECURE_SSL_REDIRECT = False
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Tối thiểu IP server (hoặc domain) – đừng để '*'
+ALLOWED_HOSTS = ['103.216.116.118']
+CSRF_TRUSTED_ORIGINS = ['http://103.216.116.118']
+
+# DB giữ nguyên phần bạn dùng env PROD
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
