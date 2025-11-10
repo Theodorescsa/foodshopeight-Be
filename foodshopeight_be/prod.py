@@ -1,7 +1,7 @@
 from .base import *
 
 # Prod mà :>
-DEBUG = False
+DEBUG = True
 
 # Khi CHƯA có HTTPS qua Nginx/certbot thì KHÔNG redirect https
 SECURE_SSL_REDIRECT = False
